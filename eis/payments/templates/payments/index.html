@@ -1,0 +1,62 @@
+<head>
+    <title>Тестовое задание №2</title>
+</head>
+<body>
+    <div>
+        <h2>Таблица долгов</h2>
+            <table>
+                <tr>
+                    <th>Дата долга</th>
+                    <th>Статус долга</th>
+                </tr>
+                    {% for accrual in accruals %}
+                        <tr>
+                            <td> {{ accrual }} </td>
+                            <td>
+                                {% if accrual.is_paid %}
+                                    Оплачен
+                                {% else %}
+                                    Не оплачен
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+            </table>
+    </div>
+    {% if payments %}
+    <div>
+        <h2>Таблица платежей</h2>
+            <table>
+                <tr>
+                    <th>Дата платежа</th>
+                    <th>Дата долга, которую закрыл платеж</th>
+                    <th>Платёж является свободным (не закрыл какой-либо долг)</th>
+                </tr>
+                {% for payment in payments%}
+                    <tr> 
+                        <td> {{ payment }} </td>
+                        <td>{% if payment.has_accrual %}
+                                {{ payment.accrual }}
+                            {% endif %}
+                        </td>
+                        <td>{% if not payment.has_accrual%}
+                                Да
+                            {% else %}
+                                Нет
+                            {% endif %}  
+                            <a href='/{{ payment.id }}/delete' style="float: right">Удалить</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+    </div>
+    {% endif %}
+    <br>
+    <h2>Ввести новый платёж</h2>
+    <form method="post" action="{% url 'index' %}">
+        {% csrf_token %}
+        {{ payment_form }}
+    <input type="submit" value="Отправить">
+    <input type="submit" value="Отклонить" onclick="window.location.href='{% url 'index' %}';return false;">
+    </form>
+</body>

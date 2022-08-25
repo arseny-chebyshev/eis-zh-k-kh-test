@@ -1,0 +1,7 @@
+<h1>Удалить платёж</h1>
+<p>Вы действительно хотите удалить платёж данной даты: {{ payment }}?</p>
+<form type action="" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Да, удалить">
+    <input type="button" name="Отмена" value="Отмена" onclick="window.location='{% url 'index' %}'">
+</form>
